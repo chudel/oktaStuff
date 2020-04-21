@@ -82,7 +82,13 @@ def deleteUser(row):
    res = conn.getresponse()
 
    rStatus = res.status
-   
+      
+   # Immediately check for Forbidden status, abort if necessary
+   if (rStatus == 401):
+      print("%s - Forbidden Response. User not deactivated or deleted. Is API Token correct?" % (loginPrefix + user))
+      status = 0
+      return status
+
    RateLimitRemaining = int(res.headers["X-Rate-Limit-Remaining"]) 
    RateLimitReset = int(res.headers["X-Rate-Limit-Reset"])
 
